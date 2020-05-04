@@ -1,5 +1,7 @@
 # Lennard-Jones example to compute forces and system potential energy
 
+
+
 import json
 import numpy as np
 from ctypes import *
@@ -21,6 +23,10 @@ Kernel = kernel.Kernel
 GlobalArray = data.GlobalArray
 Constant = kernel.Constant
 IntegratorRange = method.IntegratorRange
+
+MPIRANK = mpi.MPI.COMM_WORLD.rank
+MPISIZE = mpi.MPI.COMM_WORLD.size
+
 
 
 def make_force_pairloop(A, lj_energy, constants, cutoff):
@@ -134,8 +140,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         parameters.update(json.loads(open(sys.argv[1]).read()))
     else:
-        with open('last_inputs.json', 'w') as fh:
-            fh.write(json.dumps(parameters))
+        if MPIRANK == 0:
+            with open('last_inputs.json', 'w') as fh:
+                fh.write(json.dumps(parameters))
 
 
     steps = parameters['steps']
@@ -194,19 +201,17 @@ if __name__ == '__main__':
     # with standard normal velocities
     rng = np.random.RandomState(512)
     with A.modify() as AM:
-        if A.domain.comm.rank == 0:
+        if MPIRANK == 0:
             AM.add({
                 A.pos: utility.lattice.cubic_lattice((N1, N1, N1), (E, E, E)),
                 A.vel: rng.normal(0, 0.01, size=(N, 3)),
                 A.mass: np.ones(shape=(N, 1))
             })
-
-
+    
     lj_pairloop = make_force_pairloop(A, lj_energy, constants, r_n)
     vv1 = make_velocity_verlet_loop_1(A, constants)
     vv2 = make_velocity_verlet_loop_2(A, ke_energy, constants)
-
-
+    
     # main timestepping loop
     t0 = time.time()
     for it in IntegratorRange(steps, dt, A.vel, shell_steps, delta, verbose=False):
@@ -215,14 +220,18 @@ if __name__ == '__main__':
         lj_pairloop.execute()
         vv2.execute()
 
-        if A.domain.comm.rank == 0 and it % 1000 == 0:
+        if A.domain.comm.rank == 0 and it % 100 == 0:
             print("{: 8d} | {: 12.8e} {: 12.8e} | {: 12.8e}".format(it, lj_energy[0], ke_energy[0], lj_energy[0] + ke_energy[0]))
     t1 = time.time()
 
     if A.domain.comm.rank == 0:
-        print("Time taken: \t", t1 - t0)
+        time_taken = t1 - t0
+        print("Time taken: \t", time_taken)
         with open('last_time.json', 'w') as fh:
-            fh.write(json.dumps({'time_taken': t1 - t0}))
+            fh.write(json.dumps({
+                'time_taken': time_taken,
+                'time_taken_per_step': time_taken/steps,
+            }))
 
 
 
