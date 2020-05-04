@@ -231,6 +231,8 @@ if __name__ == '__main__':
             fh.write(json.dumps({
                 'time_taken': time_taken,
                 'time_taken_per_step': time_taken/steps,
+                'num_mpi_ranks': A.domain.comm.size,
+                'num_omp_threads': runtime.NUM_THREADS,
             }))
 
 
