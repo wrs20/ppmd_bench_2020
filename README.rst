@@ -25,4 +25,8 @@ Each run of a benchmark code should be performed in a separate directory. On com
 ``num_mpi_ranks``
     Recorded for data collection quality of life.
 
+Examples
+--------
+
+Each benchmark directory contains a ``hello_world`` directory that contains an example launch script that can be used to warm the code generation cache for the actual run and serves as an example on how to launch each benchmark.
 
