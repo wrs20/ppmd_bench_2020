@@ -1,7 +1,7 @@
 Introduction
 ------------
 
-This benchmark takes two inputs on the command line. The first is the directory containing the resource files required for the simulation. The second is the input file containing the number of steps that the simulation should perform. An example launch command line can be found in the "hello_world.sh" script in the "hello_world" directory.
+This benchmark takes two arguments on the command line. The first is the directory containing the resource files required for the simulation. The second is the input file containing the number of steps that the simulation should perform. An example launch command line can be found in the ``example_launch_hybrid.sh`` script in the ``hello_world`` directory.
 
 This benchmark has a hard strong scaling limit of 4096 MPI ranks and will not launch with more. Typically I place 1 or 2 MPI ranks per socket and use hybrid MPI+OpenMP.
 
