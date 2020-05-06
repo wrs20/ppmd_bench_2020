@@ -8,7 +8,7 @@ Benchmarks
 ----------
 
 1. Lennard-Jones: This benchmark represents a model Molecular Dynamics system, it typically reachs a strong scaling limit around 100 nodes.
-2. FMM: A benchmark that implements a Fast Multipole method. This is an example of a electrostatic solver that uses a hierarchical grid structure.
+2. FMM: A benchmark that implements a Fast Multipole method. This is an example of a electrostatic solver that uses a hierarchical grid structure. This benchmark has a hard strong scaling limit of 4096 MPI ranks.
 3. KMC: A Kinetic Monte Carlo benchmark. This benchmark should scale very well as the ratio of computation to communication is high. This benchmark should be compute bound.
 
 Output
