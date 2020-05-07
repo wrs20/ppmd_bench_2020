@@ -13,7 +13,6 @@ Requirements (Balena oriented)
 
     module load intel/compiler/64/19.5.281
     module load intel/mpi/64/18.4.274
-    module load intel/mkl/64/19.5.281
 
     # My python build
     module load ~/scratch/apps/python-3.8.1/modulefile
