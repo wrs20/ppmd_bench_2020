@@ -25,7 +25,15 @@ To install a fixed benchmark version of ``PPMD``/``coulomb_kmc`` into a Python v
     pip install --upgrade --no-cache-dir git+https://github.com/ppmd/ppmd@kmc_bench_2019
     pip install --upgrade --no-cache-dir git+https://github.com/ppmd/coulomb_kmc@bench_2019
     
+To upgrade ``PPMD`` to use the more recent, less bug prone branch, use:
+
+::
     
+    pip install --upgrade --no-cache-dir git+https://github.com/ppmd/ppmd@bench_2020
+
+
+
+
 Runtime
 ~~~~~~~
    
